@@ -28,6 +28,8 @@ class DisplayST7789(DisplayPIL):
 
     def add_args(argparse):
         """Add supplemental arguments for ST7789."""
+        DisplayPIL.add_args(argparse)
+
         argparse.add_argument("--rotation",
                               help="Rotation in degrees (Default: 90)",
                               type=int, default=90, choices=[0, 90, 180, 270])
