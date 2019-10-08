@@ -46,5 +46,5 @@ class DisplayST7789(DisplayPIL):
                               help="SPI speed in Mhz (Default 80)",
                               type=int, default=80)
         argparse.add_argument("--backlight-pin",
-                              help="ST7789 backlight pin (Default 19)",
-                              type=int, default=19)
+                              help="ST7789 backlight pin (Default 13)",
+                              type=int, default=13)
