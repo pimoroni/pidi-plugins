@@ -159,3 +159,20 @@ class DisplayPIL(Display):
 
 class DisplayFile(DisplayPIL):
     option_name = 'file'
+
+    def __init__(self, args=None):
+        DisplayPIL.__init__(self, args)
+        self._output_file = args.output_file
+
+    def add_args(argparse):
+        DisplayPIL.add_args(argparse)
+
+        argparse.add_argument("--output-file",
+                              help="File to output display image.",
+                              type=str,
+                              default="bum-output.png")
+
+    def redraw(self):
+        DisplayPIL.redraw(self)
+        self._output_image.save(self._output_file, "PNG")
+
