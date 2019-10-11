@@ -4,7 +4,7 @@ python:
     - "3.6"
 
 install:
-    - pip install flake8 pylint
+    - pip install flake8 pylint Pillow
 
 script:
     - flake8 bum-display-pil/setup.py bum-display-pil/bum_display_pil --ignore E501

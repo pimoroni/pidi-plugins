@@ -3,9 +3,6 @@ import time
 import math
 import os
 
-import tkinter
-from PIL import ImageTk
-
 from bum.display import Display
 
 
@@ -73,7 +70,7 @@ class DisplayPIL(Display):
         Display.__init__(self, args)
 
         from fonts.ttf import RobotoMedium as UserFont
-        from PIL import ImageTk, Image, ImageDraw, ImageFilter, ImageFont
+        from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
         self._downscale = 2
         self._font = ImageFont.truetype(UserFont, 42 * self._downscale)
@@ -122,7 +119,7 @@ class DisplayPIL(Display):
         artist = self._artist
 
         if ";" in artist:
-            artist = artist.replace(";", ", ") # Swap out weird semicolons for commas
+            artist = artist.replace(";", ", ")  # Swap out weird semicolons for commas
 
         box = text_in_rect(self._overlay, artist, self._font_medium, (margin, 5 * self._downscale, width - margin, 35 * self._downscale))
 
@@ -175,4 +172,3 @@ class DisplayFile(DisplayPIL):
     def redraw(self):
         DisplayPIL.redraw(self)
         self._output_image.save(self._output_file, "PNG")
-

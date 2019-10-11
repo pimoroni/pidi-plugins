@@ -10,6 +10,8 @@ __version__ = '0.0.1'
 class DisplayTK(DisplayPIL):
     """Tk display output for bum."""
 
+    # pylint: disable=too-few-public-methods
+
     option_name = 'tk'
 
     def __init__(self, args):
