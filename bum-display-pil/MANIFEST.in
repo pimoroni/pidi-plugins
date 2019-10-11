@@ -1,0 +1,2 @@
+include README.md
+recursive-include bum_display_pil *.py *.png

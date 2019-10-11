@@ -1,7 +1,7 @@
 """bum plugin for Tk display."""
 import tkinter
 from PIL import ImageTk
-from bum.display import DisplayPIL
+from bum_display_pil import DisplayPIL
 
 
 __version__ = '0.0.1'

@@ -1,6 +1,6 @@
 """ST7789 Display plugin for bum."""
 from ST7789 import ST7789, BG_SPI_CS_FRONT
-from bum.display import DisplayPIL
+from bum_display_pil import DisplayPIL
 
 __version__ = '0.0.1'
 
