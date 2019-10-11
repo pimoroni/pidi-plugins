@@ -24,6 +24,7 @@ setuptools.setup(
     ],
     packages=["bum_display_tk"],
     install_requires=[
+        "bum-display-pil",
         "tk",
         "Pillow",
     ],
