@@ -86,7 +86,6 @@ class DisplayPIL(Display):
         self._blur = args.blur_album_art
 
     def update_album_art(self, input_file):
-        Display.update_album_art(self, input_file)
         new = Image.open(input_file).resize((self._size * self._downscale, self._size * self._downscale))
         if self._blur:
             new = new.convert('RGBA').filter(ImageFilter.GaussianBlur(radius=5*self._downscale))
