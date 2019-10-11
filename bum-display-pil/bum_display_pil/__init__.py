@@ -60,6 +60,15 @@ def draw_progress_bar(image, progress, max_progress, rect, colour):
     # Calculate bar widths.
     rect = tuple(rect)  # Space which bar occupies.
     full_width = rect[3] - rect[0]
+    bar_width = int((progress / max_progress) * full_width)
+    progress_rect = (rect[0], rect[1], rect[0] + bar_width, rect[3])
+
+    # Knock back unfilled part of bar.
+    unfilled_colour = tuple(int(c * unfilled_opacity) for c in colour)
+
+    # Draw bars.
+    canvas.rectangle(rect, unfilled_colour)
+    canvas.rectangle(progress_rect, colour)
 
 
 class DisplayPIL(Display):
