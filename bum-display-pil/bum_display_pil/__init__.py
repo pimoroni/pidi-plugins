@@ -3,7 +3,10 @@ import time
 import math
 import os
 
-from bum.display import Display
+try:
+    from bum.display import Display
+except ImportError:
+    from mopidy_pirate_display.plugin import Display
 
 
 __version__ = '0.0.1'
@@ -59,7 +62,7 @@ def draw_progress_bar(image, progress, max_progress, rect, colour):
 
     # Calculate bar widths.
     rect = tuple(rect)  # Space which bar occupies.
-    full_width = rect[3] - rect[0]
+    full_width = rect[2] - rect[0]
     bar_width = int((progress / max_progress) * full_width)
     progress_rect = (rect[0], rect[1], rect[0] + bar_width, rect[3])
 
