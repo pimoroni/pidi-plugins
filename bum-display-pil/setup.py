@@ -24,6 +24,7 @@ setuptools.setup(
     ],
     packages=["bum_display_pil"],
     install_requires=[
+        "fonts",
         "font_roboto",
         "Pillow",
     ],
