@@ -1,12 +1,12 @@
-"""ST7789 Display plugin for bum."""
+"""ST7789 Display plugin for pidi."""
 from ST7789 import ST7789, BG_SPI_CS_FRONT
-from bum_display_pil import DisplayPIL
+from pidi_display_pil import DisplayPIL
 
 __version__ = '0.0.1'
 
 
 class DisplayST7789(DisplayPIL):
-    """bum display output plugin for the ST7789 1.3\" 240x240 SPI LCD"""
+    """pidi display output plugin for the ST7789 1.3\" 240x240 SPI LCD"""
 
     option_name = 'st7789'
 

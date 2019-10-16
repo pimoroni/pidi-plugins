@@ -1,14 +1,14 @@
-"""bum plugin for Tk display."""
+"""pidi plugin for Tk display."""
 import tkinter
 from PIL import ImageTk
-from bum_display_pil import DisplayPIL
+from pidi_display_pil import DisplayPIL
 
 
 __version__ = '0.0.1'
 
 
 class DisplayTK(DisplayPIL):
-    """Tk display output for bum."""
+    """Tk display output for pidi."""
 
     # pylint: disable=too-few-public-methods
 

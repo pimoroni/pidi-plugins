@@ -1,0 +1,2 @@
+include README.md
+recursive-include pidi_display_pil *.py *.png

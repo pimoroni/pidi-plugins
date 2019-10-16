@@ -1,12 +1,12 @@
-"""bum plugin for Tk display."""
+"""pidi plugin for Tk display."""
 import time
 import math
 import os
 
 try:
-    from bum.display import Display
+    from pidi.display import Display
 except ImportError:
-    from mopidy_pirate_display.plugin import Display
+    from mopidy_pidi.plugin import Display
 
 
 __version__ = '0.0.1'
@@ -178,7 +178,7 @@ class DisplayFile(DisplayPIL):
         argparse.add_argument("--output-file",
                               help="File to output display image.",
                               type=str,
-                              default="bum-output.png")
+                              default="pidi-output.png")
 
     def redraw(self):
         DisplayPIL.redraw(self)

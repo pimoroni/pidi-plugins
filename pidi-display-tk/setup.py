@@ -1,36 +1,34 @@
-"""bum - setup.py"""
 import setuptools
 
-import bum_display_pil
 
-VERSION = bum_display_pil.__version__
+VERSION = '0.0.1'
 
 
 setuptools.setup(
-    name="bum-display-pil",
+    name="pidi-display-tk",
     version=VERSION,
     author="Philip Howard",
     author_email="phil@pimoroni.com",
-    description="Display output using PIL.",
+    description="pidi plugin to display output using PIL and Tk.",
     long_description=open("README.md").read(),
     long_description_content_type='text/markdown',
     license="MIT",
-    url="https://github.com/pimoroni/bum-plugins",
+    url="https://github.com/pimoroni/pidi-plugins",
     classifiers=[
         "Environment :: X11 Applications",
         "License :: OSI Approved :: MIT License",
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python :: 3.6",
     ],
-    packages=["bum_display_pil"],
+    packages=["pidi_display_tk"],
     install_requires=[
-        "fonts",
-        "font_roboto",
+        "pidi-display-pil",
+        "tk",
         "Pillow",
     ],
     entry_points={
-        'bum_plugin_display': [
-            'File = bum_display_pil:DisplayFile'
+        'pidi.plugin.display': [
+            'DisplayTK = pidi_display_tk:DisplayTK'
         ]
     },
     python_requires=">=3.6",

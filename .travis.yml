@@ -7,9 +7,9 @@ install:
     - pip install flake8 pylint Pillow
 
 script:
-    - flake8 bum-display-pil/setup.py bum-display-pil/bum_display_pil --ignore E501
-    - pylint bum-display-pil/setup.py bum-display-pil/bum_display_pil
-    - flake8 bum-display-tk/setup.py bum-display-tk/bum_display_tk --ignore E501
-    - pylint bum-display-tk/setup.py bum-display-tk/bum_display_tk
-    - flake8 bum-display-st7789/setup.py bum-display-st7789/bum_display_st7789 --ignore E501
-    - pylint bum-display-st7789/setup.py bum-display-st7789/bum_display_st7789
+    - flake8 pidi-display-pil/setup.py pidi-display-pil/pidi_display_pil --ignore E501
+    - pylint pidi-display-pil/setup.py pidi-display-pil/pidi_display_pil
+    - flake8 pidi-display-tk/setup.py pidi-display-tk/pidi_display_tk --ignore E501
+    - pylint pidi-display-tk/setup.py pidi-display-tk/pidi_display_tk
+    - flake8 pidi-display-st7789/setup.py pidi-display-st7789/pidi_display_st7789 --ignore E501
+    - pylint pidi-display-st7789/setup.py pidi-display-st7789/pidi_display_st7789
