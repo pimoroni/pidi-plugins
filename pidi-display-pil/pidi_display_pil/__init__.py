@@ -12,9 +12,7 @@ except ImportError:
 __version__ = '0.0.1'
 
 
-def text_in_rect(image, text, font, rect, line_spacing=1.1):
-    canvas = ImageDraw.Draw(image, 'RGBA')
-
+def text_in_rect(canvas, text, font, rect, line_spacing=1.1):
     width = rect[2] - rect[0]
     height = rect[3] - rect[1]
 
@@ -55,9 +53,7 @@ def text_in_rect(image, text, font, rect, line_spacing=1.1):
         font = ImageFont.truetype(font.path, font.size - 1)
 
 
-def draw_progress_bar(image, progress, max_progress, rect, colour):
-    canvas = ImageDraw.Draw(image, 'RGBA')
-
+def draw_progress_bar(canvas, progress, max_progress, rect, colour):
     unfilled_opacity = 0.5  # Factor to scale down colour/opacity of unfilled bar.
 
     # Calculate bar widths.
@@ -89,24 +85,82 @@ class DisplayPIL(Display):
         self._font_small = ImageFont.truetype(UserFont, 20 * self._downscale)
         self._font_medium = ImageFont.truetype(UserFont, 25 * self._downscale)
 
-        self._image = Image.new('RGBA', (self._size * self._downscale, self._size * self._downscale), (0, 0, 0))
-        self._overlay = Image.new('RGBA', (self._size * self._downscale, self._size * self._downscale))
-        self._draw = ImageDraw.Draw(self._overlay, 'RGBA')
-        self._draw.fontmode = '1'
+        source_size = (self._size * self._downscale, self._size * self._downscale)
+        target_size = (self._size, self._size)
+
+        self._image_album_art = Image.new('RGBA', target_size , (0, 0, 0))
+        self._image_album_art_prev = Image.new('RGBA', target_size, (0, 0, 0))
+
+        self._text = Image.new('RGBA', source_size)
+        self._text_draw = ImageDraw.Draw(self._text, 'RGBA')
+        self._text_draw.fontmode = '1'
+        self._text_1x = None
+
+        self._overlay = Image.new('RGBA', target_size)
+        self._overlay_draw = ImageDraw.Draw(self._overlay, 'RGBA')
+
         self._output_image = None
-        self._last_change = time.time()
+        self._last_art_change = time.time()
         self._blur = args.blur_album_art
 
+        self._image_dir = os.path.join(os.path.dirname(__file__), "images")
+        self.controls_pause = Image.open(
+                os.path.join(self._image_dir, "controls-pause.png")).resize(target_size, resample=Image.LANCZOS).convert("RGBA")
+        self.controls_play = Image.open(
+                os.path.join(self._image_dir, "controls-play.png")).resize(target_size, resample=Image.LANCZOS).convert("RGBA")
+
+        self._last_artist = ""
+        self._last_title = ""
+        self._last_album = ""
+
     def update_album_art(self, input_file):
+        # Save the old album art
+        self._image_album_art_prev.paste(self._image_album_art, (0, 0))
+
+        # Prepare the new album art
         new = Image.open(input_file).resize((self._size * self._downscale, self._size * self._downscale))
         if self._blur:
             new = new.convert('RGBA').filter(ImageFilter.GaussianBlur(radius=5*self._downscale))
-        self._image.paste(new, (0, 0))
-        self._last_change = time.time()
+        new = new.resize((self._size, self._size), resample=Image.LANCZOS)
+        self._image_album_art.paste(new, (0, 0))
+        self._last_art_change = time.time()
+
+    def update_overlay(self, *args):
+        Display.update_overlay(self, *args)
+
+        if (self._last_title, self._last_artist, self._last_album) != (self._title, self._artist, self._album):
+            self.update_text_layer()
+            self._last_title = self._title
+            self._last_artist = self._artist
+            self._last_album = self._album
+
+    def update_text_layer(self):
+        self._text_draw.rectangle((0, 0, self._size * self._downscale, self._size * self._downscale), (0, 0, 0, 0))
+
+        margin = 5
+        width = self._size * self._downscale
+
+        # Artist
+        artist = self._artist
+
+        if ";" in artist:
+            artist = artist.replace(";", ", ")  # Swap out weird semicolons for commas
+
+        box = text_in_rect(self._text_draw, artist, self._font_medium, (margin, 5 * self._downscale, width - margin, 35 * self._downscale))
+
+        # Album
+        text_in_rect(self._text_draw, self._album, self._font_small, (50 * self._downscale, box[3], width - (50 * self._downscale), 70 * self._downscale))
+
+        # Song title
+        text_in_rect(self._text_draw, self._title, self._font, (margin, 95 * self._downscale, width - margin, 170 * self._downscale))
+
+        # Downscale track information
+        self._text_1x = self._text.resize((int(width / self._downscale), int(width / self._downscale)), resample=Image.LANCZOS)
 
     def redraw(self):
         # Initial setup
-        self._draw.rectangle((0, 0, self._size * self._downscale, self._size * self._downscale), (0, 0, 0, 40))
+        self._overlay_draw.rectangle((0, 0, self._size, self._size), (0, 0, 0, 40))
+
         margin = 5
         width = self._size * self._downscale
 
@@ -115,47 +169,39 @@ class DisplayPIL(Display):
         max_progress = 1.0
         colour = (225, 225, 225, 225)
         rect = (5, 220, 235, 235)
-        scaled_rect = (v * self._downscale for v in rect)
-        draw_progress_bar(self._overlay, progress, max_progress, scaled_rect, colour)
+        draw_progress_bar(self._overlay_draw, progress, max_progress, rect, colour)
 
         # Volume bar
         volume = self._volume
         max_volume = 100
         colour = (225, 225, 225, 165)
         rect = (5, 185, 205, 190)
-        scaled_rect = (v * self._downscale for v in rect)
-        draw_progress_bar(self._overlay, volume, max_volume, scaled_rect, colour)
+        draw_progress_bar(self._overlay_draw, volume, max_volume, rect, colour)
 
-        # Artist
-        artist = self._artist
+        # Crossfade Album Art
+        t_blend = min(0.25, time.time() - self._last_art_change)
+        t_blend *= 4
+        if t_blend == 1.0:
+            art = self._image_album_art
+        else:
+            art = Image.blend(self._image_album_art_prev, self._image_album_art, t_blend)
 
-        if ";" in artist:
-            artist = artist.replace(";", ", ")  # Swap out weird semicolons for commas
-
-        box = text_in_rect(self._overlay, artist, self._font_medium, (margin, 5 * self._downscale, width - margin, 35 * self._downscale))
-
-        # Album
-        text_in_rect(self._overlay, self._album, self._font_small, (50 * self._downscale, box[3], width - (50 * self._downscale), 70 * self._downscale))
-
-        # Song title
-        text_in_rect(self._overlay, self._title, self._font, (margin, 95 * self._downscale, width - margin, 170 * self._downscale))
+        # Add our text layer
+        if self._text_1x is not None:
+            overlay = Image.alpha_composite(self._overlay, self._text_1x)
+        else:
+            overlay = self._overlay
 
         # Overlay control icons
-        image_dir = os.path.join(os.path.dirname(__file__), "images")
-        controls = Image.new('RGBA', (self._size * self._downscale, self._size * self._downscale))
-
         if self._state == "play":
-            controls_img = Image.open(os.path.join(image_dir, "controls-pause.png"))
+            overlay = Image.alpha_composite(overlay, self.controls_play)
         else:
-            controls_img = Image.open(os.path.join(image_dir, "controls-play.png"))
+            overlay = Image.alpha_composite(overlay, self.controls_pause)
 
-        controls.paste(controls_img, (0, 0))
+        # Overlay combined track info onto album art
+        image = Image.alpha_composite(art, overlay)
 
-        # Render image
-        image_2x = Image.alpha_composite(self._image, self._overlay)
-        image_2x = Image.alpha_composite(image_2x, controls)
-        image_1x = image_2x.resize((int(width / self._downscale), int(width / self._downscale)), resample=Image.LANCZOS)
-        self._output_image = image_1x
+        self._output_image = image
 
     def add_args(argparse):
         Display.add_args(argparse)
