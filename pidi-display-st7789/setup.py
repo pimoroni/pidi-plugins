@@ -1,6 +1,6 @@
 import setuptools
 
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 
 
 setuptools.setup(
@@ -9,7 +9,7 @@ setuptools.setup(
     author="Philip Howard",
     author_email="phil@pimoroni.com",
     description="pidi plugin for display output using an ST7789 1.3\" 240x240 SPI LCD.",
-    long_description=open("README.md").read(),
+    long_description=open("README.md").read() + "\n" + open("CHANGELOG.txt").read(),
     long_description_content_type='text/markdown',
     license="MIT",
     url="https://github.com/pimoroni/pidi-plugins",
@@ -21,7 +21,7 @@ setuptools.setup(
     ],
     packages=["pidi_display_st7789"],
     install_requires=[
-        "pidi-display-pil",
+        "pidi-display-pil==0.0.2",
         "st7789",
         "Pillow",
     ],
@@ -30,7 +30,7 @@ setuptools.setup(
             'DisplayST7789 = pidi_display_st7789:DisplayST7789'
         ]
     },
-    python_requires=">=3.6",
+    python_requires=">=2.7",
     test_suite="tests",
     include_package_data=True
 )

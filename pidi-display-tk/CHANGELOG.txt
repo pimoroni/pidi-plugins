@@ -1,0 +1,10 @@
+0.0.2
+-----
+
+* Fix python 2.7 support for Mopidy-PiDi
+* Require pidi-display-pil==0.0.2
+
+0.0.1
+-----
+
+* Initial Release
