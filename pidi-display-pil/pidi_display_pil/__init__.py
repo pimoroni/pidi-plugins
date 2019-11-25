@@ -112,6 +112,9 @@ class DisplayPIL(Display):
         self._last_artist = ""
         self._last_title = ""
         self._last_album = ""
+        self._last_state = ""
+        self._last_volume = -1
+        self._last_progress = -1
 
     def update_album_art(self, input_file):
         # Save the old album art
@@ -158,11 +161,30 @@ class DisplayPIL(Display):
         self._text_1x = self._text.resize((int(width / self._downscale), int(width / self._downscale)), resample=Image.LANCZOS)
 
     def redraw(self):
+        margin = 5
+
+        t_blend = min(0.25, time.time() - self._last_art_change)
+        t_blend *= 4
+
+        # We don't want to update on every millisecond of progress,
+        # only when it happens to cross to the next pixel on the display
+        # and trigger a visual change
+        progress_pixels = int(self._progress * (self._size - margin - margin))
+
+        if self._output_image is not None \
+                and t_blend == 1.0 \
+                and self._state == self._last_state \
+                and self._volume == self._last_volume \
+                and self._last_progress == progress_pixels:
+            return False  # No change since last frame
+
+        self._last_state = self._state
+        self._last_volume = self._volume
+        self._last_progress = progress_pixels
+        self._last_redraw = time.time()
+
         # Initial setup
         self._overlay_draw.rectangle((0, 0, self._size, self._size), (0, 0, 0, 40))
-
-        margin = 5
-        width = self._size * self._downscale
 
         # Song progress bar
         progress = self._progress
@@ -179,8 +201,6 @@ class DisplayPIL(Display):
         draw_progress_bar(self._overlay_draw, volume, max_volume, rect, colour)
 
         # Crossfade Album Art
-        t_blend = min(0.25, time.time() - self._last_art_change)
-        t_blend *= 4
         if t_blend == 1.0:
             art = self._image_album_art
         else:
@@ -202,6 +222,7 @@ class DisplayPIL(Display):
         image = Image.alpha_composite(art, overlay)
 
         self._output_image = image
+        return True
 
     def add_args(argparse):
         Display.add_args(argparse)
