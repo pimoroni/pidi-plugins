@@ -9,7 +9,7 @@ except ImportError:
     from mopidy_pidi.plugin import Display
 
 
-__version__ = '0.0.2'
+__version__ = '0.1.0'
 
 
 def text_in_rect(canvas, text, font, rect, line_spacing=1.1):

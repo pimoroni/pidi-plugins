@@ -1,6 +1,6 @@
 import setuptools
 
-VERSION = '0.0.2'
+VERSION = '0.1.0'
 
 
 setuptools.setup(
@@ -21,7 +21,7 @@ setuptools.setup(
     ],
     packages=["pidi_display_st7789"],
     install_requires=[
-        "pidi-display-pil==0.0.2",
+        "pidi-display-pil>=0.1.0",
         "st7789",
         "Pillow",
     ],

@@ -4,7 +4,7 @@ from PIL import ImageTk
 from pidi_display_pil import DisplayPIL
 
 
-__version__ = '0.0.2'
+__version__ = '0.1.0'
 
 
 class DisplayTK(DisplayPIL):

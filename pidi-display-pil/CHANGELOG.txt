@@ -1,3 +1,8 @@
+0.1.0
+-----
+
+* Improve CPU usage by only redrawing if a visual change has occured
+
 0.0.2
 -----
 

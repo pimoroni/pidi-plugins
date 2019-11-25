@@ -1,7 +1,7 @@
 import setuptools
 
 
-VERSION = '0.0.2'
+VERSION = '0.1.0'
 
 
 setuptools.setup(
@@ -22,7 +22,7 @@ setuptools.setup(
     ],
     packages=["pidi_display_tk"],
     install_requires=[
-        "pidi-display-pil==0.0.2",
+        "pidi-display-pil>=0.1.0",
         "tk",
         "Pillow",
     ],
