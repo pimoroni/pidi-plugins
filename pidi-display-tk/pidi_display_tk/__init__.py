@@ -22,7 +22,8 @@ class DisplayTK(DisplayPIL):
         self._root.resizable(False, False)
 
     def redraw(self):
-        DisplayPIL.redraw(self)
+        if not DisplayPIL.redraw(self):
+            return
 
         self._root.title("{title} - {artist}, {album}".format(
             title=self._title,
