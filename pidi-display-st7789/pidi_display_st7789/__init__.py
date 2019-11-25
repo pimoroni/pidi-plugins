@@ -23,8 +23,8 @@ class DisplayST7789(DisplayPIL):
         self._st7789.begin()
 
     def redraw(self):
-        DisplayPIL.redraw(self)
-        self._st7789.display(self._output_image)
+        if DisplayPIL.redraw(self):
+            self._st7789.display(self._output_image)
 
     def add_args(argparse):
         """Add supplemental arguments for ST7789."""
