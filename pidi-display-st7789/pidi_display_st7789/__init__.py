@@ -22,6 +22,10 @@ class DisplayST7789(DisplayPIL):
         )
         self._st7789.begin()
 
+    def stop(self):
+        self._st7789.set_backlight(0)
+        self._st7789.command(0x28)  # DISPOFF
+
     def redraw(self):
         if DisplayPIL.redraw(self):
             self._st7789.display(self._output_image)
