@@ -1,3 +1,8 @@
+0.1.1
+-----
+
+* Handle "stop" and turn off backlight/display
+
 0.1.0
 -----
 
