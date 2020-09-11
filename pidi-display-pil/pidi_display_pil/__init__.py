@@ -128,8 +128,8 @@ class DisplayPIL(Display):
         self._image_album_art.paste(new, (0, 0))
         self._last_art_change = time.time()
 
-    def update_overlay(self, *args):
-        Display.update_overlay(self, *args)
+    def update_overlay(self, *args, **kwargs):
+        Display.update_overlay(self, *args, **kwargs)
 
         if (self._last_title, self._last_artist, self._last_album) != (self._title, self._artist, self._album):
             self.update_text_layer()
