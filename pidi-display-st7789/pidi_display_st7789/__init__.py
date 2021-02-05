@@ -1,5 +1,5 @@
 """ST7789 Display plugin for pidi."""
-from ST7789 import ST7789, BG_SPI_CS_FRONT
+from ST7789 import ST7789 as ST7789, BG_SPI_CS_FRONT, ST7789_DISPOFF
 from pidi_display_pil import DisplayPIL
 
 __version__ = '0.1.0'
@@ -24,7 +24,7 @@ class DisplayST7789(DisplayPIL):
 
     def stop(self):
         self._st7789.set_backlight(0)
-        self._st7789.command(0x28)  # DISPOFF
+        self._st7789.command(ST7789_DISPOFF)
 
     def redraw(self):
         if DisplayPIL.redraw(self):
