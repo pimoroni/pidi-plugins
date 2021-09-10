@@ -1,3 +1,9 @@
+0.1.2
+-----
+
+* Issue commands to turn off/on display on stop/start
+* Support kwargs for PiDi
+
 0.1.1
 -----
 

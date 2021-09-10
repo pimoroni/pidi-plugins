@@ -2,7 +2,7 @@
 from ST7789 import ST7789 as ST7789, BG_SPI_CS_FRONT, ST7789_DISPOFF, ST7789_DISPON
 from pidi_display_pil import DisplayPIL
 
-__version__ = '0.1.0'
+__version__ = '0.1.2'
 
 
 class DisplayST7789(DisplayPIL):
