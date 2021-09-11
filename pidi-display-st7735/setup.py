@@ -27,7 +27,7 @@ setuptools.setup(
     ],
     entry_points={
         'pidi.plugin.display': [
-            'DisplayST7735 = pidi_display_st7789:DisplayST7735'
+            'DisplayST7735 = pidi_display_st7735:DisplayST7735'
         ]
     },
     python_requires=">=2.7",
