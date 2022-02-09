@@ -214,9 +214,9 @@ class DisplayPIL(Display):
 
         # Overlay control icons
         if self._state == "play":
-            overlay = Image.alpha_composite(overlay, self.controls_play)
-        else:
             overlay = Image.alpha_composite(overlay, self.controls_pause)
+        else:
+            overlay = Image.alpha_composite(overlay, self.controls_play)
 
         # Overlay combined track info onto album art
         image = Image.alpha_composite(art, overlay)
