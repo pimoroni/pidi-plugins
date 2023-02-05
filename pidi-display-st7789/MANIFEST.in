@@ -1,4 +1,0 @@
-include README.md
-include CHANGELOG.txt
-include setup.py
-recursive-include pidi_display_st7789 *.py

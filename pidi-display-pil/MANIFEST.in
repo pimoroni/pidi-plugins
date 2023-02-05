@@ -1,3 +1,0 @@
-include README.md
-include CHANGELOG.txt
-recursive-include pidi_display_pil *.py *.png

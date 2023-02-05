@@ -1,34 +1,35 @@
-import setuptools
+from setuptools import setup, find_packages
 
+VERSION = "1.0.0"
 
-VERSION = '0.1.0'
-
-
-setuptools.setup(
-    name="pidi-display-tk",
+setup(
+    name="OrangePi.PidiPlugins",
     version=VERSION,
-    author="Philip Howard",
-    author_email="phil@pimoroni.com",
-    description="pidi plugin to display output using PIL and Tk.",
+    author='Andriy Malyshenko',
+    author_email='andriy@sonocotta.com',
+    description="Pidi plugins for display output using SPI LCDs on the OrangePi.",
     long_description=open("README.md").read() + "\n" + open("CHANGELOG.txt").read(),
     long_description_content_type='text/markdown',
     license="MIT",
-    url="https://github.com/pimoroni/pidi-plugins",
+    url="https://github.com/sonocotta/pidi-plugins-python",
     classifiers=[
         "Environment :: X11 Applications",
         "License :: OSI Approved :: MIT License",
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python :: 3.6",
     ],
-    packages=["pidi_display_tk"],
+    packages=find_packages(),
     install_requires=[
-        "pidi-display-pil>=0.1.0",
-        "tk",
+        "fonts",
+        "font_roboto",
+        "Mopidy.OrangePi.Pidi",
+        "OrangePi.ST7789",
         "Pillow",
     ],
     entry_points={
         'pidi.plugin.display': [
-            'DisplayTK = pidi_display_tk:DisplayTK'
+            'File = OrangePi_PidiPlugins:DisplayFile',
+            'DisplayST7789 = OrangePi_PidiPlugins.DisplayST7789:DisplayST7789'
         ]
     },
     python_requires=">=2.7",

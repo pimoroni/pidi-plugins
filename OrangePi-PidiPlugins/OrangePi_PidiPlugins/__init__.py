@@ -1,16 +1,10 @@
-"""pidi plugin for Tk display."""
 import time
 import math
 import os
 
-try:
-    from pidi.display import Display
-except ImportError:
-    from mopidy_pidi.plugin import Display
+from mopidy_orangepi_pidi.plugin import Display
 
-
-__version__ = '0.1.0'
-
+__version__ = '1.0.0'
 
 def text_in_rect(canvas, text, font, rect, line_spacing=1.1):
     width = rect[2] - rect[0]
@@ -85,8 +79,8 @@ class DisplayPIL(Display):
         self._font_small = ImageFont.truetype(UserFont, 20 * self._downscale)
         self._font_medium = ImageFont.truetype(UserFont, 25 * self._downscale)
 
-        source_size = (self._size * self._downscale, self._size * self._downscale)
-        target_size = (self._size, self._size)
+        source_size = (self._width * self._downscale, self._height * self._downscale)
+        target_size = (self._width, self._height)
 
         self._image_album_art = Image.new('RGBA', target_size , (0, 0, 0))
         self._image_album_art_prev = Image.new('RGBA', target_size, (0, 0, 0))
@@ -121,10 +115,10 @@ class DisplayPIL(Display):
         self._image_album_art_prev.paste(self._image_album_art, (0, 0))
 
         # Prepare the new album art
-        new = Image.open(input_file).resize((self._size * self._downscale, self._size * self._downscale))
+        new = Image.open(input_file).resize((self._width * self._downscale, self._height * self._downscale))
         if self._blur:
             new = new.convert('RGBA').filter(ImageFilter.GaussianBlur(radius=5*self._downscale))
-        new = new.resize((self._size, self._size), resample=Image.LANCZOS)
+        new = new.resize((self._width, self._height), resample=Image.LANCZOS)
         self._image_album_art.paste(new, (0, 0))
         self._last_art_change = time.time()
 
@@ -138,10 +132,11 @@ class DisplayPIL(Display):
             self._last_album = self._album
 
     def update_text_layer(self):
-        self._text_draw.rectangle((0, 0, self._size * self._downscale, self._size * self._downscale), (0, 0, 0, 0))
+        self._text_draw.rectangle((0, 0, self._width * self._downscale, self._height * self._downscale), (0, 0, 0, 0))
 
         margin = 5
-        width = self._size * self._downscale
+        width = self._width * self._downscale
+        height = self._height * self._downscale
 
         # Artist
         artist = self._artist
@@ -149,16 +144,24 @@ class DisplayPIL(Display):
         if ";" in artist:
             artist = artist.replace(";", ", ")  # Swap out weird semicolons for commas
 
-        box = text_in_rect(self._text_draw, artist, self._font_medium, (margin, 5 * self._downscale, width - margin, 35 * self._downscale))
+        box = text_in_rect(
+            self._text_draw, artist, self._font_medium, (margin, 5 * self._downscale, width - margin, 35 * self._downscale)
+        )
 
         # Album
-        text_in_rect(self._text_draw, self._album, self._font_small, (50 * self._downscale, box[3], width - (50 * self._downscale), 70 * self._downscale))
+        text_in_rect(
+            self._text_draw, self._album, self._font_small, (50 * self._downscale, box[3], width - (50 * self._downscale), 70 * self._downscale)
+        )
 
         # Song title
-        text_in_rect(self._text_draw, self._title, self._font, (margin, 95 * self._downscale, width - margin, 170 * self._downscale))
+        text_in_rect(
+            self._text_draw, self._title, self._font, (margin, 95 * self._downscale, width - margin, 170 * self._downscale)
+        )
 
         # Downscale track information
-        self._text_1x = self._text.resize((int(width / self._downscale), int(width / self._downscale)), resample=Image.LANCZOS)
+        self._text_1x = self._text.resize(
+            (int(width / self._downscale), int(height / self._downscale)), resample=Image.LANCZOS
+        )
 
     def redraw(self):
         margin = 5
@@ -169,7 +172,7 @@ class DisplayPIL(Display):
         # We don't want to update on every millisecond of progress,
         # only when it happens to cross to the next pixel on the display
         # and trigger a visual change
-        progress_pixels = int(self._progress * (self._size - margin - margin))
+        progress_pixels = int(self._progress * (self._width - margin - margin))
 
         if self._output_image is not None \
                 and t_blend == 1.0 \
@@ -184,7 +187,7 @@ class DisplayPIL(Display):
         self._last_redraw = time.time()
 
         # Initial setup
-        self._overlay_draw.rectangle((0, 0, self._size, self._size), (0, 0, 0, 40))
+        self._overlay_draw.rectangle((0, 0, self._width, self._height), (0, 0, 0, 40))
 
         # Song progress bar
         progress = self._progress
