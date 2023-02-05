@@ -1,3 +1,3 @@
 include README.md
 include CHANGELOG.txt
-recursive-include OrangePi *.py *.png
+recursive-include OrangePi-PidiPlugins *.py *.png

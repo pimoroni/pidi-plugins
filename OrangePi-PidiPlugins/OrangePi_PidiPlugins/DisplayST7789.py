@@ -2,7 +2,7 @@
 from OrangePi import ST7789, ST7789_DISPOFF, ST7789_DISPON
 from OrangePi_PidiPlugins import DisplayPIL
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 class DisplayST7789(DisplayPIL):
     """pidi display output plugin for the ST7789 SPI LCD"""

@@ -4,7 +4,7 @@ import os
 
 from mopidy_orangepi_pidi.plugin import Display
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 def text_in_rect(canvas, text, font, rect, line_spacing=1.1):
     width = rect[2] - rect[0]
